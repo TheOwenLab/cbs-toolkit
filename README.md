@@ -10,4 +10,4 @@ The goal of <b>cbs-toolkit</b> is to be a place where you can learn about the CB
 - Create and report [Issues](https://github.com/TheOwenLab/cbs-toolkit/issues) related to the software tools.
 
 # Contribute
-Have something to add? Want to write code or WIKI entries? Ping me on the Discussion boars and I will add you as collaborator!
+Have something to add? Want to write code or WIKI entries? Ping me on the Discussion board and I will add you as collaborator!
