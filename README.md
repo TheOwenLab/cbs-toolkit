@@ -2,7 +2,7 @@
 # Description
 This repository is a place for academic researchers and collaborators to learn about [Cambridge Brain Sciences](https://www.cambridgebrainsciences.com/science/research) online cognitive testing. 
 
-The goal of <b>cbs-toolkit</b> is to be a place where you can learn about the CBS tasks and the data produce, how to manage / work with / and analyze the data. You can even find useful software tools (and instructions) that can be easily run using our pre-built Docker image. 
+<b>cbs-toolkit</b> is a place to collect information about the CBS tasks and the data they produce, and how to manage / work with / and analyze the data. You can even find useful software tools (and instructions) that can be easily run using our pre-built Docker image. 
 
 # Features
 - See the [WIKI](https://github.com/TheOwenLab/cbs-toolkit/wiki) for reference documents, how-to's, and software details.
