@@ -11,20 +11,22 @@ The specifics depend on whether your Creyos data collection is implemented using
 
 ## How it works
 Simply, at the end of your Qualtrics survey each participant will be redirect to a custom Creyos URL, looks like this:
-```https://health.creyos.com/en/account/signup/owen_lab_example_trial?p=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NvZGUiOiJjb25vcndpbGQrMTIzNDU2Nzg5MDk4NzEyMzQ2NzYyMzQ3NjIzNDg5NyIsImJpcnRoX3llYXIiOiIxOTI5IiwiZ2VuZGVyIjoiTWFsZSIsImFmdGVyX2F1dGhfcmVkaXJlY3RfcGF0aCI6Imh0dHBzOi8vaGVhbHRoLmNyZXlvcy5jb20vZW4vaGVhbHRoL3Byb3RvY29scy8xMjY1MjMiLCJlcnJvcl91cmwiOiJodHRwOi8vd3d3Lmdvb2dsZS5jb20iLCJleHAiOjE2ODIxNjkzMDl9._IDsGwamLCjQhty_gDGHhJ9X11b5NPQkQWX27iTrD8ChxIatdAu5MDz4LrGzSjC6j5aYCjrRGbQswOTsCAaIow```
-Although it looks random, this URL is made up of two parts: 
-1. The Creyos signup URL (`https://health.creyos.com/en/account/signup/owen_lab_example_trial`)
+
+```
+https://health.creyos.com/en/account/signup/owen_lab_example_trial?p=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2NvZGUiOiJjb25vcndpbGQrMTIzNDU2Nzg5MDk4NzEyMzQ2NzYyMzQ3NjIzNDg5NyIsImJpcnRoX3llYXIiOiIxOTI5IiwiZ2VuZGVyIjoiTWFsZSIsImFmdGVyX2F1dGhfcmVkaXJlY3RfcGF0aCI6Imh0dHBzOi8vaGVhbHRoLmNyZXlvcy5jb20vZW4vaGVhbHRoL3Byb3RvY29scy8xMjY1MjMiLCJlcnJvcl91cmwiOiJodHRwOi8vd3d3Lmdvb2dsZS5jb20iLCJleHAiOjE2ODIxNjkzMDl9._IDsGwamLCjQhty_gDGHhJ9X11b5NPQkQWX27iTrD8ChxIatdAu5MDz4LrGzSjC6j5aYCjrRGbQswOTsCAaIow
+```
+
+Although it looks pretty random, this URL is made up of two parts: 
+1. The Creyos trial signup URL (`https://health.creyos.com/en/account/signup/owen_lab_example_trial`)
 2. A query parameter(named p; `?p=`) containing a [JSON Web Token (JWT)](https://jwt.io/). This token encapsulates data about the participant (e.g., ID, batch to be played, etc.) and an encrypted signature that validates the data structure. The trick is automatically create the JWT for each participant!
 
 Finally, we can add another redirection to the end the Creyos batch that will take your participants back to another Qualtrics survey, or somewhere else, and pass along data like the user identifier.
 
 ## Instructions
-### 1. Add the following JavaScript snippet to the header of your Qualtrics survey:
-
+1. Add the following JavaScript snippet to the header of your Qualtrics survey:
 ```
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.7.0/jsrsasign-all-min.js" integrity="sha512-At6mAU6yhy8gg1PeLBZkS563zrOrMYyICnWYaymxN/GOHWjKUeBYZ0ubrIjPI/GoaMevqk37mZz+dl6eQQG2WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 ```
-
 This code imports an external JS library ([jsrsasign](https://github.com/kjur/jsrsasign)) into your survey webpage, and we're going to use this library to generate JWTs. The following image shows you where to paste the code in Qualtrics.
 
 <center><img src="./images/01-qualtrics.png" alt="Q1" width="200"/></center>
@@ -32,14 +34,14 @@ This code imports an external JS library ([jsrsasign](https://github.com/kjur/js
 2. Add (at least two) two embedded data fields to your survey: `CREYOS_URL` will hold the redirection URL for a participant, and `SUBJ_ID` will contain their unique study identifier. In Qualtrics' "Survey Flow", add a new element ("Embedded Data") and move it to be the 1st element in the survey flow. Create the two fields. It should look something like this:
 <center><img src="./images/02-qualtrics.png" alt="Q2" width="500"/></center>
 
-3. Find the required info about your Creyos Trial. You'll need: 1) the trial `NAME` and 2) the trial `SALT` (a unique hexadecimal ID). Login to [Creyos](https://health.creyos.com/), then paste this in your browser's URL bar: `https://health.creyos.com/en/admin/trials`. Find and select "View" for your trial, then locate `NAME` and `SALT`. Copy and paste these values somewhere safe. *Note that you will have to replace spaces in your trial's name should with underscores.*
+3. Find the required info about your Creyos Trial. You'll need: 1) the trial `NAME` and 2) the trial `SALT` (a unique hexadecimal ID). Login to [Creyos](https://health.creyos.com/), then paste this in your browser's URL bar: `https://health.creyos.com/en/admin/trials`. Find and select "View" for your trial, then locate `NAME` and `SALT`. Copy and paste these values somewhere safe. *Note that you have to replace spaces in your trial's name with underscores.*
 
 4. Find the batch identifier for the cognitive assessment that you want participants to complete. Go to `https://health.creyos.com/en/admin/batches`, locate the specific batch you want to use, then click "View". Copy/paste the `ID` number (at the very top of the batch page) somewhere safe.
 
 5. Back in Qualtrics add some JavaScript to the very first question / item in your survey. Click on the question, then under "Question Behaviour" choose "JavaScript" (see green arrows below). Alternatively, there may already be a JavaScript button *on* your question (see yellow arrow):
 <center><img src="./images/03-qualtrics.png" alt="Q2" width="600"/></center>
 
-  * Replace the `addOnLoad` block with the following code block. Make sure to replace required fields: `your_trial_name`, `trial_salt`, and `your_batch_id` with the value you collected in steps 3-4.
+  * Replace the `addOnLoad` block with the following code block. Make sure to replace required fields: `your_trial_name`, `trial_salt`, and `your_batch_id` with the values you collected in steps 3-4.
 
 
 ```{JavaScript}
@@ -86,6 +88,8 @@ Qualtrics.SurveyEngine.addOnload(function()
 6. Finally, make the survey redict participants to the `CREYOS_URL` contained in the embedded data field by customizing the "End of Survey" block in the Survey flow:
 
 <center><img src="./images/04-qualtrics.png" alt="Q2" width="600"/></center>
+
+7. You can also set your Creyos batch to redirect upon completion by setting the `Redirect URL` field and including the appropriate parameters, like `user_id`.
 
 
 
